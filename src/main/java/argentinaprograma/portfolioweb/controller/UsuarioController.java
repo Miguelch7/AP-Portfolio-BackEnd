@@ -2,9 +2,7 @@ package argentinaprograma.portfolioweb.controller;
 
 import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.service.IUsuarioService;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
