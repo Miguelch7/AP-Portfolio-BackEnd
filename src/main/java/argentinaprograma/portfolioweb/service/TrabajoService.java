@@ -34,6 +34,7 @@ public class TrabajoService implements ITrabajoService {
         return nuevoTrabajo;
     }
 
+    @Override
     public Trabajo actualizarTrabajo(Long id, String puesto, String empresa, String descripcion, String imagen, String fecha_inicio, String fecha_fin) {
 
         Trabajo trabajoActualizado = obtenerTrabajo(id);
@@ -52,6 +53,7 @@ public class TrabajoService implements ITrabajoService {
         return trabajoActualizado;
     }
 
+    @Override
     public void eliminarTrabajo(Long id) {
         trabajoRepository.deleteById(id);
     }

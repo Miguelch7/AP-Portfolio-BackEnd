@@ -34,6 +34,7 @@ public class EstudioService implements IEstudioService {
         return nuevoEstudio;
     }
 
+    @Override
     public Estudio actualizarEstudio(Long id, String titulo, String institucion, String descripcion, String imagen, String fecha_inicio, String fecha_fin) {
 
         Estudio estudioActualizado = obtenerEstudio(id);
@@ -52,6 +53,7 @@ public class EstudioService implements IEstudioService {
         return estudioActualizado;
     }
 
+    @Override
     public void eliminarEstudio(Long id) {
         estudioRepository.deleteById(id);
     }
