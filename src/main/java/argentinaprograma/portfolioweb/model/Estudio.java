@@ -13,7 +13,7 @@ import javax.persistence.Id;
 public class Estudio {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
     private String institucion;

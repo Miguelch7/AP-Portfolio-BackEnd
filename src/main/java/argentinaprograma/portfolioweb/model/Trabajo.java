@@ -13,7 +13,7 @@ import javax.persistence.Id;
 public class Trabajo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String puesto;
     private String empresa;
