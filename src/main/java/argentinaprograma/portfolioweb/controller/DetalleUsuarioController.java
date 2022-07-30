@@ -1,0 +1,48 @@
+package argentinaprograma.portfolioweb.controller;
+
+import argentinaprograma.portfolioweb.model.DetalleUsuario;
+import argentinaprograma.portfolioweb.service.DetalleUsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class DetalleUsuarioController {
+
+    @Autowired
+    private DetalleUsuarioService detalleUsuarioService;
+
+    @GetMapping("/usuarios/{usuarioId}/detalle")
+    private DetalleUsuario obtenerDetalleUsuario(@PathVariable Long usuarioId) {
+        DetalleUsuario detalleUsuario = detalleUsuarioService.obtenerDetalleUsuarioPorUsuarioId(usuarioId);
+
+        return detalleUsuario;
+    }
+
+    @PostMapping("/usuarios/{usuarioId}/detalle")
+    private DetalleUsuario crearDetalleUsuario(@PathVariable Long usuarioId, @RequestBody DetalleUsuario detalleUsuario) {
+        DetalleUsuario detalleUsuarioCreado = detalleUsuarioService.crearDetalleUsuario(usuarioId, detalleUsuario);
+
+        return detalleUsuarioCreado;
+    }
+
+    @PutMapping("/usuarios/{usuarioId}/detalle")
+    private DetalleUsuario actualizarDetalleUsuario(
+        @PathVariable(value = "usuarioId") Long usuarioId,
+        @RequestParam("descripcion") String descripcion,
+        @RequestParam("profesion") String profesion,
+        @RequestParam("direccion") String direccion,
+        @RequestParam("cv") String cv
+    ) {
+        DetalleUsuario detalleUsuarioActualizado = detalleUsuarioService.actualizarDetalleUsuario(usuarioId, descripcion, profesion, direccion, cv);
+
+        return detalleUsuarioActualizado;
+    }
+
+    @DeleteMapping("/usuarios/{usuarioId}/detalle")
+    private String eliminarDetalleUsuario(@PathVariable Long usuarioId) {
+        detalleUsuarioService.eliminarDetalleUsuario(usuarioId);
+
+        return "El detalle de usuario se eliminó correctamente";
+    }
+
+}
