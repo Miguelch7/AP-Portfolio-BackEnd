@@ -3,6 +3,7 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class UsuarioController {
         return iUsuarioService.obtenerUsuario(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/usuarios")
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
         Usuario usuarioCreado = iUsuarioService.crearUsuario(usuario);
@@ -31,6 +33,7 @@ public class UsuarioController {
         return usuarioCreado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/usuarios/{id}")
     public Usuario actualizarUsuario(
             @PathVariable Long id,
@@ -43,6 +46,7 @@ public class UsuarioController {
         return usuarioActualizado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/usuarios/{id}")
     public String eliminarUsuario(@PathVariable Long id) {
         iUsuarioService.eliminarUsuario(id);

@@ -3,6 +3,7 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.DetalleUsuario;
 import argentinaprograma.portfolioweb.service.DetalleUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class DetalleUsuarioController {
         return detalleUsuario;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/usuarios/{usuarioId}/detalle")
     private DetalleUsuario crearDetalleUsuario(@PathVariable Long usuarioId, @RequestBody DetalleUsuario detalleUsuario) {
         DetalleUsuario detalleUsuarioCreado = detalleUsuarioService.crearDetalleUsuario(usuarioId, detalleUsuario);
@@ -25,6 +27,7 @@ public class DetalleUsuarioController {
         return detalleUsuarioCreado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/usuarios/{usuarioId}/detalle")
     private DetalleUsuario actualizarDetalleUsuario(
         @PathVariable(value = "usuarioId") Long usuarioId,
@@ -38,6 +41,7 @@ public class DetalleUsuarioController {
         return detalleUsuarioActualizado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/usuarios/{usuarioId}/detalle")
     private String eliminarDetalleUsuario(@PathVariable Long usuarioId) {
         detalleUsuarioService.eliminarDetalleUsuario(usuarioId);

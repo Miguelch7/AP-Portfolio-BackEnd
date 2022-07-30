@@ -3,6 +3,7 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Estudio;
 import argentinaprograma.portfolioweb.service.IEstudioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class EstudioController {
         return estudio;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/estudios")
     public Estudio crearEstudio(@RequestBody Estudio estudio) {
         Estudio estudioCreado = iEstudioService.crearEstudio(estudio);
@@ -35,6 +37,7 @@ public class EstudioController {
         return estudioCreado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/estudios/{id}")
     public Estudio actualizarEstudio(
             @PathVariable Long id,
@@ -50,6 +53,7 @@ public class EstudioController {
         return estudioActualizado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/estudios/{id}")
     public String eliminarEstudio(@PathVariable Long id) {
         iEstudioService.eliminarEstudio(id);

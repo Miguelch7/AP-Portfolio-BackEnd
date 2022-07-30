@@ -3,6 +3,7 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Proyecto;
 import argentinaprograma.portfolioweb.service.IProyectoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ProyectoController {
         return proyecto;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/proyectos")
     public Proyecto crearProyecto(@RequestBody Proyecto proyecto) {
         Proyecto proyectoCreado = iProyectoService.crearProyecto(proyecto);
@@ -35,6 +37,7 @@ public class ProyectoController {
         return proyectoCreado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/proyectos/{id}")
     public Proyecto actualizarProyecto(
             @PathVariable Long id,
@@ -49,6 +52,7 @@ public class ProyectoController {
         return proyectoActualizado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/proyectos/{id}")
     public String eliminarProyecto(@PathVariable Long id) {
         iProyectoService.eliminarProyecto(id);

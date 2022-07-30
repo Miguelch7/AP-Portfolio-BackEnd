@@ -3,6 +3,7 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Skill;
 import argentinaprograma.portfolioweb.service.ISkillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class SkillController {
         return skill;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/skills")
     public Skill crearSkill(@RequestBody Skill skill) {
         Skill skillCreada = iSkillService.crearSkill(skill);
@@ -35,6 +37,7 @@ public class SkillController {
         return skillCreada;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/skills/{id}")
     public Skill actualizarSkill(
             @PathVariable Long id,
@@ -48,6 +51,7 @@ public class SkillController {
         return skillActualizada;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/skills/{id}")
     public String eliminarSkill(@PathVariable Long id) {
         iSkillService.eliminarSkill(id);

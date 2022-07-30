@@ -3,6 +3,7 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Trabajo;
 import argentinaprograma.portfolioweb.service.ITrabajoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class TrabajoController {
         return trabajo;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/trabajos")
     public Trabajo crearTrabajo(@RequestBody Trabajo trabajo) {
         Trabajo trabajoCreado = iTrabajoService.crearTrabajo(trabajo);
@@ -35,6 +37,7 @@ public class TrabajoController {
         return trabajoCreado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/trabajos/{id}")
     public Trabajo actualizarTrabajo(
             @PathVariable Long id,
@@ -50,6 +53,7 @@ public class TrabajoController {
         return trabajoActualizado;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/trabajos/{id}")
     public String eliminarTrabajo(@PathVariable Long id) {
         iTrabajoService.eliminarTrabajo(id);
