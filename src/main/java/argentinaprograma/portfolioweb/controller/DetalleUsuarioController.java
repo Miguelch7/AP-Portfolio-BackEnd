@@ -1,11 +1,14 @@
 package argentinaprograma.portfolioweb.controller;
 
 import argentinaprograma.portfolioweb.model.DetalleUsuario;
+import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.service.DetalleUsuarioService;
+import argentinaprograma.portfolioweb.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 public class DetalleUsuarioController {
 
