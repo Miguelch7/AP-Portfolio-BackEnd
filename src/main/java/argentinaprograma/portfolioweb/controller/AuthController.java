@@ -1,11 +1,14 @@
 package argentinaprograma.portfolioweb.controller;
 
+import argentinaprograma.portfolioweb.dto.JwtAuthResponseDTO;
 import argentinaprograma.portfolioweb.dto.LoginDTO;
 import argentinaprograma.portfolioweb.model.Rol;
 import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.repository.RolRepository;
 import argentinaprograma.portfolioweb.repository.UsuarioRepository;
+import argentinaprograma.portfolioweb.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,13 +36,18 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @PostMapping("/auth/login")
-    public String authenticateUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<JwtAuthResponseDTO> authenticateUser(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "Login exitoso";
+        String token = jwtTokenProvider.generarToken(authentication);
+
+        return ResponseEntity.ok(new JwtAuthResponseDTO(token));
     }
 
     @PostMapping("/auth/register")
