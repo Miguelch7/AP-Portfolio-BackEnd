@@ -1,9 +1,7 @@
 package argentinaprograma.portfolioweb.controller;
 
 import argentinaprograma.portfolioweb.model.DetalleUsuario;
-import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.service.DetalleUsuarioService;
-import argentinaprograma.portfolioweb.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +14,7 @@ public class DetalleUsuarioController {
     private DetalleUsuarioService detalleUsuarioService;
 
     @GetMapping("/usuarios/{usuarioId}/detalle")
-    private DetalleUsuario obtenerDetalleUsuario(@PathVariable Long usuarioId) {
+    public DetalleUsuario obtenerDetalleUsuario(@PathVariable Long usuarioId) {
         DetalleUsuario detalleUsuario = detalleUsuarioService.obtenerDetalleUsuarioPorUsuarioId(usuarioId);
 
         return detalleUsuario;
@@ -24,7 +22,7 @@ public class DetalleUsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/usuarios/{usuarioId}/detalle")
-    private DetalleUsuario crearDetalleUsuario(@PathVariable Long usuarioId, @RequestBody DetalleUsuario detalleUsuario) {
+    public DetalleUsuario crearDetalleUsuario(@PathVariable Long usuarioId, @RequestBody DetalleUsuario detalleUsuario) {
         DetalleUsuario detalleUsuarioCreado = detalleUsuarioService.crearDetalleUsuario(usuarioId, detalleUsuario);
 
         return detalleUsuarioCreado;
@@ -32,7 +30,7 @@ public class DetalleUsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/usuarios/{usuarioId}/detalle")
-    private DetalleUsuario actualizarDetalleUsuario(
+    public DetalleUsuario actualizarDetalleUsuario(
         @PathVariable(value = "usuarioId") Long usuarioId,
         @RequestParam("descripcion") String descripcion,
         @RequestParam("profesion") String profesion,
@@ -46,7 +44,7 @@ public class DetalleUsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/usuarios/{usuarioId}/detalle")
-    private String eliminarDetalleUsuario(@PathVariable Long usuarioId) {
+    public String eliminarDetalleUsuario(@PathVariable Long usuarioId) {
         detalleUsuarioService.eliminarDetalleUsuario(usuarioId);
 
         return "El detalle de usuario se eliminó correctamente";
