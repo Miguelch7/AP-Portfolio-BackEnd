@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,12 +13,18 @@ public class DetalleUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nombre;
+    private String apellido;
     private String profesion;
+
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
+    private String imagen;
     private String direccion;
     private String cv;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 }

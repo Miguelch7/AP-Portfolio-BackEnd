@@ -15,11 +15,13 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService iUsuarioService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/usuarios")
     public List<Usuario> listarUsuarios() {
         return iUsuarioService.listarUsuarios();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/usuarios/{id}")
     public Usuario obtenerUsuario(@PathVariable Long id) {
         return iUsuarioService.obtenerUsuario(id);
@@ -37,11 +39,9 @@ public class UsuarioController {
     @PutMapping("/usuarios/{id}")
     public Usuario actualizarUsuario(
             @PathVariable Long id,
-            @RequestParam("nombre") String nuevoNombre,
-            @RequestParam("apellido") String nuevoApellido,
             @RequestParam("email") String nuevoEmail
     ) {
-        Usuario usuarioActualizado = iUsuarioService.actualizarUsuario(id, nuevoNombre, nuevoApellido, nuevoEmail);
+        Usuario usuarioActualizado = iUsuarioService.actualizarUsuario(id, nuevoEmail);
 
         return usuarioActualizado;
     }

@@ -35,12 +35,10 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Usuario actualizarUsuario(Long id, String nombre, String apellido, String email) {
+    public Usuario actualizarUsuario(Long id, String email) {
         Usuario usuarioActualizado = this.obtenerUsuario(id);
 
         if (usuarioActualizado != null) {
-            usuarioActualizado.setNombre(nombre);
-            usuarioActualizado.setApellido(apellido);
             usuarioActualizado.setEmail(email);
             
             usuarioRepository.save(usuarioActualizado);
