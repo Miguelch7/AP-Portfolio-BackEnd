@@ -43,8 +43,11 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
     @Override
     public DetalleUsuario actualizarDetalleUsuario(
         Long usuarioId,
-        String descripcion,
+        String nombre,
+        String apellido,
         String profesion,
+        String descripcion,
+        String imagen,
         String direccion,
         String cv
     ) {
@@ -59,6 +62,8 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
 
         if (detalleUsuarioBD == null) {
             DetalleUsuario detalleUsuario = new DetalleUsuario();
+            detalleUsuario.setNombre(nombre);
+            detalleUsuario.setApellido(apellido);
             detalleUsuario.setDescripcion(descripcion);
             detalleUsuario.setProfesion(profesion);
             detalleUsuario.setDireccion(direccion);
@@ -71,6 +76,8 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
             return detalleUsuarioNuevo;
         }
 
+        detalleUsuarioBD.setNombre(nombre);
+        detalleUsuarioBD.setApellido(apellido);
         detalleUsuarioBD.setDescripcion(descripcion);
         detalleUsuarioBD.setProfesion(profesion);
         detalleUsuarioBD.setDireccion(direccion);
