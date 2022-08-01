@@ -16,6 +16,8 @@ public class DetalleUsuario {
     private String nombre;
     private String apellido;
     private String profesion;
+
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
     private String imagen;
     private String direccion;
