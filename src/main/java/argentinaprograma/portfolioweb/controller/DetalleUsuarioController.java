@@ -47,10 +47,10 @@ public class DetalleUsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/usuarios/{usuarioId}/detalle")
-    public String eliminarDetalleUsuario(@PathVariable Long usuarioId) {
+    public Long eliminarDetalleUsuario(@PathVariable Long usuarioId) {
         iDetalleUsuarioService.eliminarDetalleUsuario(usuarioId);
 
-        return "El detalle de usuario se eliminó correctamente";
+        return usuarioId;
     }
 
 }

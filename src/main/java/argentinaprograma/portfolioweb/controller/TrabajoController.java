@@ -55,9 +55,9 @@ public class TrabajoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/trabajos/{id}")
-    public String eliminarTrabajo(@PathVariable Long id) {
+    public Long eliminarTrabajo(@PathVariable Long id) {
         iTrabajoService.eliminarTrabajo(id);
 
-        return "El trabajo se eliminó correctamente";
+        return id;
     }
 }

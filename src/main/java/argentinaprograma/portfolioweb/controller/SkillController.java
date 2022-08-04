@@ -53,9 +53,9 @@ public class SkillController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/skills/{id}")
-    public String eliminarSkill(@PathVariable Long id) {
+    public Long eliminarSkill(@PathVariable Long id) {
         iSkillService.eliminarSkill(id);
 
-        return "La skill se eliminó correctamente";
+        return id;
     }
 }

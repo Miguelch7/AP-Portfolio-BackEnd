@@ -48,9 +48,9 @@ public class UsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/usuarios/{id}")
-    public String eliminarUsuario(@PathVariable Long id) {
+    public Long eliminarUsuario(@PathVariable Long id) {
         iUsuarioService.eliminarUsuario(id);
 
-        return "Usuario eliminado correctamente";
+        return id;
     }
 }

@@ -54,9 +54,9 @@ public class ProyectoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/proyectos/{id}")
-    public String eliminarProyecto(@PathVariable Long id) {
+    public Long eliminarProyecto(@PathVariable Long id) {
         iProyectoService.eliminarProyecto(id);
 
-        return "El proyecto se eliminó correctamente";
+        return id;
     }
 }
