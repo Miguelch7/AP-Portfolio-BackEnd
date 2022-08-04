@@ -55,9 +55,9 @@ public class EstudioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/estudios/{id}")
-    public String eliminarEstudio(@PathVariable Long id) {
+    public Long eliminarEstudio(@PathVariable Long id) {
         iEstudioService.eliminarEstudio(id);
 
-        return "El estudio se eliminó correctamente";
+        return id;
     }
 }
