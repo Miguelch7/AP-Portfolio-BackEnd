@@ -1,6 +1,6 @@
 package argentinaprograma.portfolioweb.controller;
 
-import argentinaprograma.portfolioweb.model.Estudio;
+import argentinaprograma.portfolioweb.dto.EstudioDTO;
 import argentinaprograma.portfolioweb.service.IEstudioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -19,30 +20,30 @@ public class EstudioController {
     private IEstudioService iEstudioService;
 
     @GetMapping
-    public ResponseEntity<List<Estudio>> listarEstudios() {
-        List<Estudio> listadoEstudios = iEstudioService.listarEstudios();
+    public ResponseEntity<List<EstudioDTO>> listarEstudios() {
+        List<EstudioDTO> listadoEstudios = iEstudioService.listarEstudios();
 
         return new ResponseEntity<>(listadoEstudios, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estudio> obtenerEstudio(@PathVariable Long id) {
-        Estudio estudio = iEstudioService.obtenerEstudio(id);
+    public ResponseEntity<EstudioDTO> obtenerEstudio(@PathVariable Long id) {
+        EstudioDTO estudio = iEstudioService.obtenerEstudio(id);
 
         return new ResponseEntity<>(estudio, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Estudio> crearEstudio(@RequestBody Estudio estudio) {
-        Estudio estudioCreado = iEstudioService.crearEstudio(estudio);
+    public ResponseEntity<EstudioDTO> crearEstudio(@Valid @RequestBody EstudioDTO estudioDTO) {
+        EstudioDTO estudioCreado = iEstudioService.crearEstudio(estudioDTO);
 
         return new ResponseEntity<>(estudioCreado, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Estudio> actualizarEstudio(
+    public ResponseEntity<EstudioDTO> actualizarEstudio(
             @PathVariable Long id,
             @RequestParam("titulo") String titulo,
             @RequestParam("institucion") String institucion,
@@ -51,7 +52,7 @@ public class EstudioController {
             @RequestParam("fechaInicio") String fechaInicio,
             @RequestParam("fechaFin") String fechaFin
     ) {
-        Estudio estudioActualizado = iEstudioService.actualizarEstudio(id, titulo, institucion, descripcion, imagen, fechaInicio, fechaFin);
+        EstudioDTO estudioActualizado = iEstudioService.actualizarEstudio(id, titulo, institucion, descripcion, imagen, fechaInicio, fechaFin);
 
         return new ResponseEntity<>(estudioActualizado, HttpStatus.OK);
     }

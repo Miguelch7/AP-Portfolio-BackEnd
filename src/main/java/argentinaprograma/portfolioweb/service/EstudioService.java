@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.dto.EstudioDTO;
 import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.Estudio;
 import argentinaprograma.portfolioweb.repository.EstudioRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EstudioService implements IEstudioService {
@@ -14,29 +16,62 @@ public class EstudioService implements IEstudioService {
     @Autowired
     private EstudioRepository estudioRepository;
 
-    @Override
-    public List<Estudio> listarEstudios() {
-        List<Estudio> listadoEstudios = estudioRepository.findAll();
+    // Convertir Entity a DTO
+    private EstudioDTO mapToDTO(Estudio estudio) {
+        EstudioDTO estudioDTO = new EstudioDTO();
 
-        return listadoEstudios;
+        estudioDTO.setId(estudio.getId());
+        estudioDTO.setTitulo(estudio.getTitulo());
+        estudioDTO.setInstitucion(estudio.getInstitucion());
+        estudioDTO.setDescripcion(estudio.getDescripcion());
+        estudioDTO.setImagen(estudio.getImagen());
+        estudioDTO.setFechaInicio(estudio.getFechaInicio());
+        estudioDTO.setFechaFin(estudio.getFechaFin());
+
+        return estudioDTO;
     }
 
-    @Override
-    public Estudio obtenerEstudio(Long id) {
-        Estudio estudio = estudioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estudio", "id", id));
+    // Convertir DTO a Entity
+    private Estudio mapToEntity(EstudioDTO estudioDTO) {
+        Estudio estudio = new Estudio();
+
+        estudio.setTitulo(estudioDTO.getTitulo());
+        estudio.setInstitucion(estudioDTO.getInstitucion());
+        estudio.setDescripcion(estudioDTO.getDescripcion());
+        estudio.setImagen(estudioDTO.getImagen());
+        estudio.setFechaInicio(estudioDTO.getFechaInicio());
+        estudio.setFechaFin(estudioDTO.getFechaFin());
 
         return estudio;
     }
 
     @Override
-    public Estudio crearEstudio(Estudio estudio) {
-        Estudio nuevoEstudio = estudioRepository.save(estudio);
+    public List<EstudioDTO> listarEstudios() {
+        List<Estudio> listadoEstudios = estudioRepository.findAll();
 
-        return nuevoEstudio;
+        List<EstudioDTO> listadoEstudiosDTO = listadoEstudios.stream().map(estudio -> mapToDTO(estudio)).collect(Collectors.toList());
+
+        return listadoEstudiosDTO;
     }
 
     @Override
-    public Estudio actualizarEstudio(Long id, String titulo, String institucion, String descripcion, String imagen, String fechaInicio, String fechaFin) {
+    public EstudioDTO obtenerEstudio(Long id) {
+        Estudio estudio = estudioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estudio", "id", id));
+
+        return mapToDTO(estudio);
+    }
+
+    @Override
+    public EstudioDTO crearEstudio(EstudioDTO estudioDTO) {
+        Estudio estudio = mapToEntity(estudioDTO);
+
+        Estudio nuevoEstudio = estudioRepository.save(estudio);
+
+        return mapToDTO(nuevoEstudio);
+    }
+
+    @Override
+    public EstudioDTO actualizarEstudio(Long id, String titulo, String institucion, String descripcion, String imagen, String fechaInicio, String fechaFin) {
 
         Estudio estudio = estudioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estudio", "id", id));
 
@@ -49,7 +84,7 @@ public class EstudioService implements IEstudioService {
 
         Estudio estudioActualizado = estudioRepository.save(estudio);
 
-        return estudioActualizado;
+        return mapToDTO(estudioActualizado);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package argentinaprograma.portfolioweb.controller;
 
 import argentinaprograma.portfolioweb.dto.TrabajoDTO;
-import argentinaprograma.portfolioweb.model.Trabajo;
 import argentinaprograma.portfolioweb.service.ITrabajoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -35,7 +36,7 @@ public class TrabajoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<TrabajoDTO> crearTrabajo(@RequestBody TrabajoDTO trabajoDTO) {
+    public ResponseEntity<TrabajoDTO> crearTrabajo(@Valid @RequestBody TrabajoDTO trabajoDTO) {
         TrabajoDTO trabajoCreado = iTrabajoService.crearTrabajo(trabajoDTO);
 
         return new ResponseEntity<>(trabajoCreado, HttpStatus.CREATED);
