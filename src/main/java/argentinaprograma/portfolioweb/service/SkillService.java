@@ -1,13 +1,14 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.dto.SkillDTO;
 import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
-import argentinaprograma.portfolioweb.model.Proyecto;
 import argentinaprograma.portfolioweb.model.Skill;
 import argentinaprograma.portfolioweb.repository.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SkillService implements ISkillService {
@@ -15,29 +16,59 @@ public class SkillService implements ISkillService {
     @Autowired
     private SkillRepository skillRepository;
 
-    @Override
-    public List<Skill> listarSkills() {
-        List <Skill> listadoSkills = skillRepository.findAll();
+    // Convertir Entity a DTO
+    private SkillDTO mapToDTO(Skill skill) {
+        SkillDTO skillDTO = new SkillDTO();
 
-        return listadoSkills;
+        skillDTO.setId(skill.getId());
+        skillDTO.setNombre(skill.getNombre());
+        skillDTO.setDescripcion(skill.getDescripcion());
+        skillDTO.setImagen(skill.getImagen());
+        skillDTO.setPorcentaje(skill.getPorcentaje());
+
+        return skillDTO;
     }
 
-    @Override
-    public Skill obtenerSkill(Long id) {
-        Skill skill = skillRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Skill", "id", id));;
+    // Convertir DTO a Entity
+    private Skill mapToEntity(SkillDTO skillDTO) {
+        Skill skill = new Skill();
+
+        skill.setNombre(skillDTO.getNombre());
+        skill.setDescripcion(skillDTO.getDescripcion());
+        skill.setImagen(skillDTO.getImagen());
+        skill.setPorcentaje(skillDTO.getPorcentaje());
 
         return skill;
     }
 
     @Override
-    public Skill crearSkill(Skill skill) {
-        Skill nuevaSkill = skillRepository.save(skill);
+    public List<SkillDTO> listarSkills() {
+        List<Skill> listadoSkills = skillRepository.findAll();
 
-        return nuevaSkill;
+        List<SkillDTO> listadoSkillsDTO = listadoSkills.stream().map(skill -> mapToDTO(skill)).collect(Collectors.toList());
+
+        return listadoSkillsDTO;
     }
 
     @Override
-    public Skill actualizarSkill(Long id, String nombre, String descripcion, String imagen, Integer porcentaje) {
+    public SkillDTO obtenerSkill(Long id) {
+        Skill skill = skillRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Skill", "id", id));;
+
+        return mapToDTO(skill);
+    }
+
+    @Override
+    public SkillDTO crearSkill(SkillDTO skillDTO) {
+
+        Skill skill = mapToEntity(skillDTO);
+
+        Skill nuevaSkill = skillRepository.save(skill);
+
+        return mapToDTO(nuevaSkill);
+    }
+
+    @Override
+    public SkillDTO actualizarSkill(Long id, String nombre, String descripcion, String imagen, Integer porcentaje) {
         Skill skill = skillRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Skill", "id", id));;
 
         skill.setNombre(nombre);
@@ -47,7 +78,7 @@ public class SkillService implements ISkillService {
 
         Skill skillActualizada = skillRepository.save(skill);
 
-        return skillActualizada;
+        return mapToDTO(skillActualizada);
     }
 
     @Override
