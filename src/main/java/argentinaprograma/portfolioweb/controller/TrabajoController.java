@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.controller;
 
+import argentinaprograma.portfolioweb.dto.TrabajoDTO;
 import argentinaprograma.portfolioweb.model.Trabajo;
 import argentinaprograma.portfolioweb.service.ITrabajoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +20,30 @@ public class TrabajoController {
     private ITrabajoService iTrabajoService;
 
     @GetMapping
-    public ResponseEntity<List<Trabajo>> listarTrabajos() {
-        List<Trabajo> listadoTrabajos = iTrabajoService.listarTrabajos();
+    public ResponseEntity<List<TrabajoDTO>> listarTrabajos() {
+        List<TrabajoDTO> listadoTrabajos = iTrabajoService.listarTrabajos();
 
         return new ResponseEntity<>(listadoTrabajos, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Trabajo> obtenerTrabajo(@PathVariable Long id) {
-        Trabajo trabajo = iTrabajoService.obtenerTrabajo(id);
+    public ResponseEntity<TrabajoDTO> obtenerTrabajo(@PathVariable Long id) {
+        TrabajoDTO trabajo = iTrabajoService.obtenerTrabajo(id);
 
         return new ResponseEntity<>(trabajo, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Trabajo> crearTrabajo(@RequestBody Trabajo trabajo) {
-        Trabajo trabajoCreado = iTrabajoService.crearTrabajo(trabajo);
+    public ResponseEntity<TrabajoDTO> crearTrabajo(@RequestBody TrabajoDTO trabajoDTO) {
+        TrabajoDTO trabajoCreado = iTrabajoService.crearTrabajo(trabajoDTO);
 
         return new ResponseEntity<>(trabajoCreado, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Trabajo> actualizarTrabajo(
+    public ResponseEntity<TrabajoDTO> actualizarTrabajo(
             @PathVariable Long id,
             @RequestParam("puesto") String puesto,
             @RequestParam("empresa") String empresa,
@@ -51,7 +52,7 @@ public class TrabajoController {
             @RequestParam("fechaInicio") String fechaInicio,
             @RequestParam("fechaFin") String fechaFin
     ) {
-        Trabajo trabajoActualizado = iTrabajoService.actualizarTrabajo(id, puesto, empresa, descripcion, imagen, fechaInicio, fechaFin);
+        TrabajoDTO trabajoActualizado = iTrabajoService.actualizarTrabajo(id, puesto, empresa, descripcion, imagen, fechaInicio, fechaFin);
 
         return new ResponseEntity<>(trabajoActualizado, HttpStatus.OK);
     }

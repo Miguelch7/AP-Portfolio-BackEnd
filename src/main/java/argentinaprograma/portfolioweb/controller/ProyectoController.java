@@ -35,8 +35,8 @@ public class ProyectoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ProyectoDTO> crearProyecto(@Valid @RequestBody ProyectoDTO proyecto) {
-        ProyectoDTO proyectoCreado = iProyectoService.crearProyecto(proyecto);
+    public ResponseEntity<ProyectoDTO> crearProyecto(@Valid @RequestBody ProyectoDTO proyectoDTO) {
+        ProyectoDTO proyectoCreado = iProyectoService.crearProyecto(proyectoDTO);
 
         return new ResponseEntity<>(proyectoCreado, HttpStatus.CREATED);
     }
