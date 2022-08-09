@@ -24,7 +24,7 @@ public class DetalleUsuario {
     @Column(name = "profesion", length = 100, nullable = false)
     private String profesion;
 
-    @Column(name = "descripcion", columnDefinition = "TEXT")
+    @Column(name = "descripcion", columnDefinition = "TEXT", nullable = false)
     private String descripcion;
 
     @Column(name = "imagen")

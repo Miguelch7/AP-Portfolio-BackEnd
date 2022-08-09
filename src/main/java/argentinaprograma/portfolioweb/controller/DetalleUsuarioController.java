@@ -1,12 +1,14 @@
 package argentinaprograma.portfolioweb.controller;
 
-import argentinaprograma.portfolioweb.model.DetalleUsuario;
+import argentinaprograma.portfolioweb.dto.DetalleUsuarioDTO;
 import argentinaprograma.portfolioweb.service.IDetalleUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -17,23 +19,23 @@ public class DetalleUsuarioController {
     private IDetalleUsuarioService iDetalleUsuarioService;
 
     @GetMapping("/{usuarioId}/detalle")
-    public ResponseEntity<DetalleUsuario> obtenerDetalleUsuario(@PathVariable Long usuarioId) {
-        DetalleUsuario detalleUsuario = iDetalleUsuarioService.obtenerDetalleUsuarioPorUsuarioId(usuarioId);
+    public ResponseEntity<DetalleUsuarioDTO> obtenerDetalleUsuario(@PathVariable Long usuarioId) {
+        DetalleUsuarioDTO detalleUsuarioDTO = iDetalleUsuarioService.obtenerDetalleUsuarioPorUsuarioId(usuarioId);
 
-        return new ResponseEntity<>(detalleUsuario, HttpStatus.OK);
+        return new ResponseEntity<>(detalleUsuarioDTO, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{usuarioId}/detalle")
-    public ResponseEntity<DetalleUsuario> crearDetalleUsuario(@PathVariable Long usuarioId, @RequestBody DetalleUsuario detalleUsuario) {
-        DetalleUsuario detalleUsuarioCreado = iDetalleUsuarioService.crearDetalleUsuario(usuarioId, detalleUsuario);
+    public ResponseEntity<DetalleUsuarioDTO> crearDetalleUsuario(@PathVariable Long usuarioId, @Valid @RequestBody DetalleUsuarioDTO detalleUsuarioDTO) {
+        DetalleUsuarioDTO detalleUsuarioCreado = iDetalleUsuarioService.crearDetalleUsuario(usuarioId, detalleUsuarioDTO);
 
         return new ResponseEntity<>(detalleUsuarioCreado, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{usuarioId}/detalle")
-    public ResponseEntity<DetalleUsuario> actualizarDetalleUsuario(
+    public ResponseEntity<DetalleUsuarioDTO> actualizarDetalleUsuario(
         @PathVariable(value = "usuarioId") Long usuarioId,
         @RequestParam("nombre") String nombre,
         @RequestParam("apellido") String apellido,
@@ -43,7 +45,7 @@ public class DetalleUsuarioController {
         @RequestParam("direccion") String direccion,
         @RequestParam("linkCv") String linkCv
     ) {
-        DetalleUsuario detalleUsuarioActualizado = iDetalleUsuarioService.actualizarDetalleUsuario(usuarioId, nombre, apellido, profesion, descripcion, imagen, direccion, linkCv);
+        DetalleUsuarioDTO detalleUsuarioActualizado = iDetalleUsuarioService.actualizarDetalleUsuario(usuarioId, nombre, apellido, profesion, descripcion, imagen, direccion, linkCv);
 
         return new ResponseEntity<>(detalleUsuarioActualizado, HttpStatus.OK);
     }

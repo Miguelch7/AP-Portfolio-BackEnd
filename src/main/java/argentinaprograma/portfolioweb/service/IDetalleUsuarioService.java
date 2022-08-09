@@ -1,11 +1,11 @@
 package argentinaprograma.portfolioweb.service;
 
-import argentinaprograma.portfolioweb.model.DetalleUsuario;
+import argentinaprograma.portfolioweb.dto.DetalleUsuarioDTO;
 
 public interface IDetalleUsuarioService {
 
-    public DetalleUsuario obtenerDetalleUsuarioPorUsuarioId(Long usuarioId);
-    public DetalleUsuario crearDetalleUsuario(Long usuarioId, DetalleUsuario detalleUsuario);
-    public DetalleUsuario actualizarDetalleUsuario(Long usuarioId, String nombre, String apellido, String profesion, String descripcion, String imagen, String direccion, String linkCv);
+    public DetalleUsuarioDTO obtenerDetalleUsuarioPorUsuarioId(Long usuarioId);
+    public DetalleUsuarioDTO crearDetalleUsuario(Long usuarioId, DetalleUsuarioDTO detalleUsuarioDTO);
+    public DetalleUsuarioDTO actualizarDetalleUsuario(Long usuarioId, String nombre, String apellido, String profesion, String descripcion, String imagen, String direccion, String linkCv);
     public void eliminarDetalleUsuario(Long usuarioId);
 }

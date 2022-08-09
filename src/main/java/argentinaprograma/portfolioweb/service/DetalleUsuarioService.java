@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.dto.DetalleUsuarioDTO;
 import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.DetalleUsuario;
 import argentinaprograma.portfolioweb.model.Usuario;
@@ -17,32 +18,59 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Override
-    public DetalleUsuario obtenerDetalleUsuarioPorUsuarioId(Long usuarioId) {
-        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
+    // Convertir Entity a DTO
+    private DetalleUsuarioDTO mapToDTO(DetalleUsuario detalleUsuario) {
+        DetalleUsuarioDTO detalleUsuarioDTO = new DetalleUsuarioDTO();
+
+        detalleUsuarioDTO.setId(detalleUsuario.getId());
+        detalleUsuarioDTO.setNombre(detalleUsuario.getNombre());
+        detalleUsuarioDTO.setApellido(detalleUsuario.getApellido());
+        detalleUsuarioDTO.setProfesion(detalleUsuario.getProfesion());
+        detalleUsuarioDTO.setDescripcion(detalleUsuario.getDescripcion());
+        detalleUsuarioDTO.setImagen(detalleUsuario.getImagen());
+        detalleUsuarioDTO.setDireccion(detalleUsuario.getDireccion());
+        detalleUsuarioDTO.setLinkCv(detalleUsuario.getLinkCv());
+
+        return detalleUsuarioDTO;
+    }
+
+    // Convertir DTO a Entity
+    private DetalleUsuario mapToEntity(DetalleUsuarioDTO detalleUsuarioDTO) {
+        DetalleUsuario detalleUsuario = new DetalleUsuario();
+
+        detalleUsuario.setNombre(detalleUsuarioDTO.getNombre());
+        detalleUsuario.setApellido(detalleUsuarioDTO.getApellido());
+        detalleUsuario.setProfesion(detalleUsuarioDTO.getProfesion());
+        detalleUsuario.setDescripcion(detalleUsuarioDTO.getDescripcion());
+        detalleUsuario.setImagen(detalleUsuarioDTO.getImagen());
+        detalleUsuario.setDireccion(detalleUsuarioDTO.getDireccion());
+        detalleUsuario.setLinkCv(detalleUsuarioDTO.getLinkCv());
 
         return detalleUsuario;
     }
 
     @Override
-    public DetalleUsuario crearDetalleUsuario(Long usuarioId, DetalleUsuario detalleUsuario) {
+    public DetalleUsuarioDTO obtenerDetalleUsuarioPorUsuarioId(Long usuarioId) {
+        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
-
-        if (usuario != null) {
-
-            detalleUsuario.setUsuario(usuario);
-
-            DetalleUsuario detalleUsuarioCreado = detalleUsuarioRepository.save(detalleUsuario);
-
-            return detalleUsuarioCreado;
-        }
-
-        return null;
+        return mapToDTO(detalleUsuario);
     }
 
     @Override
-    public DetalleUsuario actualizarDetalleUsuario(
+    public DetalleUsuarioDTO crearDetalleUsuario(Long usuarioId, DetalleUsuarioDTO detalleUsuarioDTO) {
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
+
+        DetalleUsuario detalleUsuario = mapToEntity(detalleUsuarioDTO);
+
+        detalleUsuario.setUsuario(usuario);
+
+        DetalleUsuario detalleUsuarioCreado = detalleUsuarioRepository.save(detalleUsuario);
+
+        return mapToDTO(detalleUsuarioCreado);
+    }
+
+    @Override
+    public DetalleUsuarioDTO actualizarDetalleUsuario(
         Long usuarioId,
         String nombre,
         String apellido,
@@ -70,7 +98,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
             DetalleUsuario detalleUsuarioNuevo = detalleUsuarioRepository.save(detalleUsuario);
             detalleUsuarioNuevo.setUsuario(usuario);
 
-            return detalleUsuarioNuevo;
+            return mapToDTO(detalleUsuarioNuevo);
         }
 
         detalleUsuarioBD.setNombre(nombre);
@@ -82,7 +110,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
 
         DetalleUsuario detalleUsuarioActualizado = detalleUsuarioRepository.save(detalleUsuarioBD);
 
-        return detalleUsuarioActualizado;
+        return mapToDTO(detalleUsuarioActualizado);
     }
 
     @Override
