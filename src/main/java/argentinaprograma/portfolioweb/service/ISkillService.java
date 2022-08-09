@@ -1,7 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
 import argentinaprograma.portfolioweb.dto.SkillDTO;
-import argentinaprograma.portfolioweb.model.Skill;
 
 import java.util.List;
 
