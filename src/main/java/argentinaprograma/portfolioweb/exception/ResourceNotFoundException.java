@@ -15,7 +15,7 @@ public class ResourceNotFoundException extends RuntimeException {
     private Long valor;
 
     public ResourceNotFoundException(String recurso, String campo, Long valor) {
-        super(String.format("No se ha encontrado un/a %s con %s = '%s'", recurso, campo, valor));
+        super(String.format("No se ha encontrado un/a %s con %s = %s", recurso, campo, valor));
         this.recurso = recurso;
         this.campo = campo;
         this.valor = valor;
