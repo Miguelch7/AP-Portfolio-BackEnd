@@ -13,7 +13,7 @@ public class SkillDTO {
 
     private Long id;
 
-    @NotEmpty(message = "El nombre de la skill no debe ser vacía")
+    @NotEmpty(message = "El nombre de la skill es obligatorio")
     @Size(min = 2, message = "El nombre de la skill debe tener al menos 2 caracteres")
     private String nombre;
 

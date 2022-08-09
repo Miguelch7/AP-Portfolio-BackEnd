@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.dto.ProyectoDTO;
 import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.Proyecto;
 import argentinaprograma.portfolioweb.repository.ProyectoRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProyectoService implements IProyectoService {
@@ -14,29 +16,60 @@ public class ProyectoService implements IProyectoService {
     @Autowired
     private ProyectoRepository proyectoRepository;
 
-    @Override
-    public List<Proyecto> listarProyectos() {
-        List <Proyecto> listadoProyectos = proyectoRepository.findAll();
+    // Convertir Entity a DTO
+    private ProyectoDTO mapToDTO(Proyecto proyecto) {
+        ProyectoDTO proyectoDTO = new ProyectoDTO();
 
-        return listadoProyectos;
+        proyectoDTO.setId(proyecto.getId());
+        proyectoDTO.setNombre(proyecto.getNombre());
+        proyectoDTO.setDescripcion(proyecto.getDescripcion());
+        proyectoDTO.setImagen(proyecto.getImagen());
+        proyectoDTO.setLinkProyecto(proyecto.getLinkProyecto());
+        proyectoDTO.setLinkRepositorio(proyecto.getLinkRepositorio());
+
+        return proyectoDTO;
     }
 
-    @Override
-    public Proyecto obtenerProyecto(Long id) {
-        Proyecto proyecto = proyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto", "id", id));
+    // Convertir DTO a Entity
+    private Proyecto mapToEntity(ProyectoDTO proyectoDTO) {
+        Proyecto proyecto = new Proyecto();
+
+        proyecto.setNombre(proyectoDTO.getNombre());
+        proyecto.setDescripcion(proyectoDTO.getDescripcion());
+        proyecto.setImagen(proyectoDTO.getImagen());
+        proyecto.setLinkProyecto(proyectoDTO.getLinkProyecto());
+        proyecto.setLinkRepositorio(proyectoDTO.getLinkRepositorio());
 
         return proyecto;
     }
 
     @Override
-    public Proyecto crearProyecto(Proyecto proyecto) {
-        Proyecto nuevoProyecto = proyectoRepository.save(proyecto);
+    public List<ProyectoDTO> listarProyectos() {
+        List <Proyecto> listadoProyectos = proyectoRepository.findAll();
 
-        return nuevoProyecto;
+        List<ProyectoDTO> listadoProyectosDTO = listadoProyectos.stream().map(proyecto -> mapToDTO(proyecto)).collect(Collectors.toList());
+
+        return listadoProyectosDTO;
     }
 
     @Override
-    public Proyecto actualizarProyecto(Long id, String nombre, String descripcion, String imagen, String linkProyecto, String linkRepositorio) {
+    public ProyectoDTO obtenerProyecto(Long id) {
+        Proyecto proyecto = proyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto", "id", id));
+
+        return mapToDTO(proyecto);
+    }
+
+    @Override
+    public ProyectoDTO crearProyecto(ProyectoDTO proyectoDTO) {
+        Proyecto proyecto = mapToEntity(proyectoDTO);
+
+        Proyecto nuevoProyecto = proyectoRepository.save(proyecto);
+
+        return mapToDTO(nuevoProyecto);
+    }
+
+    @Override
+    public ProyectoDTO actualizarProyecto(Long id, String nombre, String descripcion, String imagen, String linkProyecto, String linkRepositorio) {
         Proyecto proyecto = proyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto", "id", id));;
 
         proyecto.setNombre(nombre);
@@ -47,7 +80,7 @@ public class ProyectoService implements IProyectoService {
 
         Proyecto proyectoActualizado = proyectoRepository.save(proyecto);
 
-        return proyectoActualizado;
+        return mapToDTO(proyectoActualizado);
     }
 
     @Override

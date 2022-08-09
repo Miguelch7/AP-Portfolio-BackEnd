@@ -17,15 +17,15 @@ public class Proyecto {
     @Column(name = "nombre", length = 100, nullable = false)
     private String nombre;
 
-    @Column(name = "descripcion", columnDefinition = "TEXT")
+    @Column(name = "descripcion", columnDefinition = "TEXT", nullable = false)
     private String descripcion;
 
-    @Column(name = "imagen", nullable = false)
+    @Column(name = "imagen")
     private String imagen;
 
-    @Column(name = "link_proyecto", nullable = false)
+    @Column(name = "link_proyecto")
     private String linkProyecto;
 
-    @Column(name = "link_repositorio", nullable = false)
+    @Column(name = "link_repositorio")
     private String linkRepositorio;
 }

@@ -1,7 +1,6 @@
 package argentinaprograma.portfolioweb.controller;
 
 import argentinaprograma.portfolioweb.dto.SkillDTO;
-import argentinaprograma.portfolioweb.model.Skill;
 import argentinaprograma.portfolioweb.service.ISkillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
