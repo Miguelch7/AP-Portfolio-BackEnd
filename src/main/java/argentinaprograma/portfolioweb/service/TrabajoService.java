@@ -35,7 +35,7 @@ public class TrabajoService implements ITrabajoService {
     }
 
     @Override
-    public Trabajo actualizarTrabajo(Long id, String puesto, String empresa, String descripcion, String imagen, String fecha_inicio, String fecha_fin) {
+    public Trabajo actualizarTrabajo(Long id, String puesto, String empresa, String descripcion, String imagen, String fechaInicio, String fechaFin) {
 
         Trabajo trabajoActualizado = obtenerTrabajo(id);
 
@@ -44,8 +44,8 @@ public class TrabajoService implements ITrabajoService {
             trabajoActualizado.setEmpresa(empresa);
             trabajoActualizado.setDescripcion(descripcion);
             trabajoActualizado.setImagen(imagen);
-            trabajoActualizado.setFecha_inicio(fecha_inicio);
-            trabajoActualizado.setFecha_fin(fecha_fin);
+            trabajoActualizado.setFechaInicio(fechaInicio);
+            trabajoActualizado.setFechaFin(fechaFin);
 
             trabajoRepository.save(trabajoActualizado);
         }

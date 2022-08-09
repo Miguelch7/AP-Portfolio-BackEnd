@@ -35,15 +35,15 @@ public class ProyectoService implements IProyectoService {
     }
 
     @Override
-    public Proyecto actualizarProyecto(Long id, String nombre, String descripcion, String imagen, String link_proyecto, String link_repositorio) {
+    public Proyecto actualizarProyecto(Long id, String nombre, String descripcion, String imagen, String linkProyecto, String linkRepositorio) {
         Proyecto proyectoActualizado = obtenerProyecto(id);
 
         if (proyectoActualizado != null) {
             proyectoActualizado.setNombre(nombre);
             proyectoActualizado.setDescripcion(descripcion);
             proyectoActualizado.setImagen(imagen);
-            proyectoActualizado.setLink_proyecto(link_proyecto);
-            proyectoActualizado.setLink_repositorio(link_repositorio);
+            proyectoActualizado.setLinkProyecto(linkProyecto);
+            proyectoActualizado.setLinkRepositorio(linkRepositorio);
 
             proyectoRepository.save(proyectoActualizado);
         }

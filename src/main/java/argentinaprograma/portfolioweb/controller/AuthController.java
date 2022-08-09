@@ -8,21 +8,20 @@ import argentinaprograma.portfolioweb.repository.RolRepository;
 import argentinaprograma.portfolioweb.repository.UsuarioRepository;
 import argentinaprograma.portfolioweb.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -40,7 +39,7 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<JwtAuthResponseDTO> authenticateUser(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
@@ -48,11 +47,11 @@ public class AuthController {
 
         String token = jwtTokenProvider.generarToken(authentication);
 
-        return ResponseEntity.ok(new JwtAuthResponseDTO(token));
+        return new ResponseEntity<>(new JwtAuthResponseDTO(token), HttpStatus.OK);
     }
 
-    @PostMapping("/auth/register")
-    public Usuario registerUser(@RequestBody Usuario usuario) {
+    @PostMapping("/register")
+    public ResponseEntity<Usuario> registerUser(@RequestBody Usuario usuario) {
 
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             return null;
@@ -65,6 +64,6 @@ public class AuthController {
 
         Usuario usuarioCreado = usuarioRepository.save(usuario);
 
-        return usuarioCreado;
+        return new ResponseEntity<>(usuarioCreado, HttpStatus.CREATED);
     }
 }

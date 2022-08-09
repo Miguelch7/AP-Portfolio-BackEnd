@@ -7,17 +7,28 @@ import javax.persistence.*;
 
 @Getter @Setter
 @Entity
+@Table(name = "trabajos")
 public class Trabajo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "puesto", length = 100, nullable = false)
     private String puesto;
+
+    @Column(name = "empresa", length = 100, nullable = false)
     private String empresa;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
+
+    @Column(name = "imagen")
     private String imagen;
-    private String fecha_inicio;
-    private String fecha_fin;
+
+    @Column(name = "fecha_inicio", length = 50, nullable = false)
+    private String fechaInicio;
+
+    @Column(name = "fecha_fin", length = 50, nullable = false)
+    private String fechaFin;
 }

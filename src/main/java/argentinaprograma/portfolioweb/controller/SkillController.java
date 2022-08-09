@@ -3,6 +3,8 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Skill;
 import argentinaprograma.portfolioweb.service.ISkillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,36 +12,37 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api/skills")
 public class SkillController {
 
     @Autowired
     private ISkillService iSkillService;
 
-    @GetMapping("/skills")
-    public List<Skill> listarSkills() {
+    @GetMapping
+    public ResponseEntity<List<Skill>> listarSkills() {
         List<Skill> listadoSkills = iSkillService.listarSkills();
 
-        return listadoSkills;
+        return new ResponseEntity<>(listadoSkills, HttpStatus.OK);
     }
 
-    @GetMapping("/skills/{id}")
-    public Skill obtenerSkill(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Skill> obtenerSkill(@PathVariable Long id) {
         Skill skill = iSkillService.obtenerSkill(id);
 
-        return skill;
+        return new ResponseEntity<>(skill, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/skills")
-    public Skill crearSkill(@RequestBody Skill skill) {
+    @PostMapping
+    public ResponseEntity<Skill> crearSkill(@RequestBody Skill skill) {
         Skill skillCreada = iSkillService.crearSkill(skill);
 
-        return skillCreada;
+        return new ResponseEntity<>(skillCreada, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/skills/{id}")
-    public Skill actualizarSkill(
+    @PutMapping("/{id}")
+    public ResponseEntity<Skill> actualizarSkill(
             @PathVariable Long id,
             @RequestParam("nombre") String nombre,
             @RequestParam("descripcion") String descripcion,
@@ -48,14 +51,14 @@ public class SkillController {
     ) {
         Skill skillActualizada = iSkillService.actualizarSkill(id, nombre, descripcion, imagen, porcentaje);
 
-        return skillActualizada;
+        return new ResponseEntity<>(skillActualizada, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/skills/{id}")
-    public Long eliminarSkill(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> eliminarSkill(@PathVariable Long id) {
         iSkillService.eliminarSkill(id);
 
-        return id;
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

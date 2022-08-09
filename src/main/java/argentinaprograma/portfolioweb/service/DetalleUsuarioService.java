@@ -49,7 +49,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
         String descripcion,
         String imagen,
         String direccion,
-        String cv
+        String linkCv
     ) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
@@ -67,7 +67,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
             detalleUsuario.setDescripcion(descripcion);
             detalleUsuario.setProfesion(profesion);
             detalleUsuario.setDireccion(direccion);
-            detalleUsuario.setCv(cv);
+            detalleUsuario.setLinkCv(linkCv);
             detalleUsuario.setUsuario(usuario);
 
             DetalleUsuario detalleUsuarioNuevo = detalleUsuarioRepository.save(detalleUsuario);
@@ -81,7 +81,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
         detalleUsuarioBD.setDescripcion(descripcion);
         detalleUsuarioBD.setProfesion(profesion);
         detalleUsuarioBD.setDireccion(direccion);
-        detalleUsuarioBD.setCv(cv);
+        detalleUsuarioBD.setLinkCv(linkCv);
 
         DetalleUsuario detalleUsuarioActualizado = detalleUsuarioRepository.save(detalleUsuarioBD);
 

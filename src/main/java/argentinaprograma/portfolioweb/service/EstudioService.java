@@ -35,7 +35,7 @@ public class EstudioService implements IEstudioService {
     }
 
     @Override
-    public Estudio actualizarEstudio(Long id, String titulo, String institucion, String descripcion, String imagen, String fecha_inicio, String fecha_fin) {
+    public Estudio actualizarEstudio(Long id, String titulo, String institucion, String descripcion, String imagen, String fechaInicio, String fechaFin) {
 
         Estudio estudioActualizado = obtenerEstudio(id);
 
@@ -44,8 +44,8 @@ public class EstudioService implements IEstudioService {
             estudioActualizado.setInstitucion(institucion);
             estudioActualizado.setDescripcion(descripcion);
             estudioActualizado.setImagen(imagen);
-            estudioActualizado.setFecha_inicio(fecha_inicio);
-            estudioActualizado.setFecha_fin(fecha_fin);
+            estudioActualizado.setFechaInicio(fechaInicio);
+            estudioActualizado.setFechaFin(fechaFin);
 
             estudioRepository.save(estudioActualizado);
         }

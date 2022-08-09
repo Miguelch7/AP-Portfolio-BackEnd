@@ -3,6 +3,8 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,47 +12,52 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     @Autowired
     private IUsuarioService iUsuarioService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/usuarios")
-    public List<Usuario> listarUsuarios() {
-        return iUsuarioService.listarUsuarios();
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        List<Usuario> listadoUsuarios = iUsuarioService.listarUsuarios();
+
+        return new ResponseEntity<>(listadoUsuarios, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/usuarios/{id}")
-    public Usuario obtenerUsuario(@PathVariable Long id) {
-        return iUsuarioService.obtenerUsuario(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long id) {
+        Usuario usuario = iUsuarioService.obtenerUsuario(id);
+
+        return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/usuarios")
-    public Usuario crearUsuario(@RequestBody Usuario usuario) {
+    @PostMapping
+    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
         Usuario usuarioCreado = iUsuarioService.crearUsuario(usuario);
 
-        return usuarioCreado;
+        return new ResponseEntity<>(usuarioCreado, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/usuarios/{id}")
-    public Usuario actualizarUsuario(
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> actualizarUsuario(
             @PathVariable Long id,
             @RequestParam("email") String nuevoEmail
     ) {
         Usuario usuarioActualizado = iUsuarioService.actualizarUsuario(id, nuevoEmail);
 
-        return usuarioActualizado;
+        return new ResponseEntity<>(usuarioActualizado, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/usuarios/{id}")
-    public Long eliminarUsuario(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> eliminarUsuario(@PathVariable Long id) {
         iUsuarioService.eliminarUsuario(id);
 
-        return id;
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

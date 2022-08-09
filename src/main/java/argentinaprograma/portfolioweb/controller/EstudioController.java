@@ -3,6 +3,8 @@ package argentinaprograma.portfolioweb.controller;
 import argentinaprograma.portfolioweb.model.Estudio;
 import argentinaprograma.portfolioweb.service.IEstudioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,54 +12,55 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api/estudios")
 public class EstudioController {
 
     @Autowired
     private IEstudioService iEstudioService;
 
-    @GetMapping("/estudios")
-    public List<Estudio> listarEstudios() {
+    @GetMapping
+    public ResponseEntity<List<Estudio>> listarEstudios() {
         List<Estudio> listadoEstudios = iEstudioService.listarEstudios();
 
-        return listadoEstudios;
+        return new ResponseEntity<>(listadoEstudios, HttpStatus.OK);
     }
 
-    @GetMapping("/estudios/{id}")
-    public Estudio obtenerEstudio(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Estudio> obtenerEstudio(@PathVariable Long id) {
         Estudio estudio = iEstudioService.obtenerEstudio(id);
 
-        return estudio;
+        return new ResponseEntity<>(estudio, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/estudios")
-    public Estudio crearEstudio(@RequestBody Estudio estudio) {
+    @PostMapping
+    public ResponseEntity<Estudio> crearEstudio(@RequestBody Estudio estudio) {
         Estudio estudioCreado = iEstudioService.crearEstudio(estudio);
 
-        return estudioCreado;
+        return new ResponseEntity<>(estudioCreado, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/estudios/{id}")
-    public Estudio actualizarEstudio(
+    @PutMapping("/{id}")
+    public ResponseEntity<Estudio> actualizarEstudio(
             @PathVariable Long id,
             @RequestParam("titulo") String titulo,
             @RequestParam("institucion") String institucion,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("imagen") String imagen,
-            @RequestParam("fecha_inicio") String fecha_inicio,
-            @RequestParam("fecha_fin") String fecha_fin
+            @RequestParam("fechaInicio") String fechaInicio,
+            @RequestParam("fechaFin") String fechaFin
     ) {
-        Estudio estudioActualizado = iEstudioService.actualizarEstudio(id, titulo, institucion, descripcion, imagen, fecha_inicio, fecha_fin);
+        Estudio estudioActualizado = iEstudioService.actualizarEstudio(id, titulo, institucion, descripcion, imagen, fechaInicio, fechaFin);
 
-        return estudioActualizado;
+        return new ResponseEntity<>(estudioActualizado, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/estudios/{id}")
-    public Long eliminarEstudio(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> eliminarEstudio(@PathVariable Long id) {
         iEstudioService.eliminarEstudio(id);
 
-        return id;
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }
