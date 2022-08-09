@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.Proyecto;
 import argentinaprograma.portfolioweb.repository.ProyectoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class ProyectoService implements IProyectoService {
 
     @Override
     public Proyecto obtenerProyecto(Long id) {
-        Proyecto proyecto = proyectoRepository.findById(id).orElse(null);
+        Proyecto proyecto = proyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto", "id", id));
 
         return proyecto;
     }
@@ -36,23 +37,23 @@ public class ProyectoService implements IProyectoService {
 
     @Override
     public Proyecto actualizarProyecto(Long id, String nombre, String descripcion, String imagen, String linkProyecto, String linkRepositorio) {
-        Proyecto proyectoActualizado = obtenerProyecto(id);
+        Proyecto proyecto = proyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto", "id", id));;
 
-        if (proyectoActualizado != null) {
-            proyectoActualizado.setNombre(nombre);
-            proyectoActualizado.setDescripcion(descripcion);
-            proyectoActualizado.setImagen(imagen);
-            proyectoActualizado.setLinkProyecto(linkProyecto);
-            proyectoActualizado.setLinkRepositorio(linkRepositorio);
+        proyecto.setNombre(nombre);
+        proyecto.setDescripcion(descripcion);
+        proyecto.setImagen(imagen);
+        proyecto.setLinkProyecto(linkProyecto);
+        proyecto.setLinkRepositorio(linkRepositorio);
 
-            proyectoRepository.save(proyectoActualizado);
-        }
+        Proyecto proyectoActualizado = proyectoRepository.save(proyecto);
 
         return proyectoActualizado;
     }
 
     @Override
     public void eliminarProyecto(Long id) {
-        proyectoRepository.deleteById(id);
+        Proyecto proyecto = proyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto", "id", id));;
+
+        proyectoRepository.delete(proyecto);
     }
 }

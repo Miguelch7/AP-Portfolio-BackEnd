@@ -1,5 +1,7 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
+import argentinaprograma.portfolioweb.model.Skill;
 import argentinaprograma.portfolioweb.model.Trabajo;
 import argentinaprograma.portfolioweb.repository.TrabajoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class TrabajoService implements ITrabajoService {
 
     @Override
     public Trabajo obtenerTrabajo(Long id) {
-        Trabajo trabajo = trabajoRepository.findById(id).orElse(null);
+        Trabajo trabajo = trabajoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trabajo", "id", id));;
 
         return trabajo;
     }
@@ -37,24 +39,24 @@ public class TrabajoService implements ITrabajoService {
     @Override
     public Trabajo actualizarTrabajo(Long id, String puesto, String empresa, String descripcion, String imagen, String fechaInicio, String fechaFin) {
 
-        Trabajo trabajoActualizado = obtenerTrabajo(id);
+        Trabajo trabajo = trabajoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trabajo", "id", id));;
 
-        if (trabajoActualizado != null) {
-            trabajoActualizado.setPuesto(puesto);
-            trabajoActualizado.setEmpresa(empresa);
-            trabajoActualizado.setDescripcion(descripcion);
-            trabajoActualizado.setImagen(imagen);
-            trabajoActualizado.setFechaInicio(fechaInicio);
-            trabajoActualizado.setFechaFin(fechaFin);
+        trabajo.setPuesto(puesto);
+        trabajo.setEmpresa(empresa);
+        trabajo.setDescripcion(descripcion);
+        trabajo.setImagen(imagen);
+        trabajo.setFechaInicio(fechaInicio);
+        trabajo.setFechaFin(fechaFin);
 
-            trabajoRepository.save(trabajoActualizado);
-        }
+        Trabajo trabajoActualizado = trabajoRepository.save(trabajo);
 
         return trabajoActualizado;
     }
 
     @Override
     public void eliminarTrabajo(Long id) {
-        trabajoRepository.deleteById(id);
+        Trabajo trabajo = trabajoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trabajo", "id", id));;
+
+        trabajoRepository.delete(trabajo);
     }
 }

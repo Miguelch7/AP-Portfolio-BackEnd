@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.Estudio;
 import argentinaprograma.portfolioweb.repository.EstudioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class EstudioService implements IEstudioService {
 
     @Override
     public Estudio obtenerEstudio(Long id) {
-        Estudio estudio = estudioRepository.findById(id).orElse(null);
+        Estudio estudio = estudioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estudio", "id", id));
 
         return estudio;
     }
@@ -37,25 +38,24 @@ public class EstudioService implements IEstudioService {
     @Override
     public Estudio actualizarEstudio(Long id, String titulo, String institucion, String descripcion, String imagen, String fechaInicio, String fechaFin) {
 
-        Estudio estudioActualizado = obtenerEstudio(id);
+        Estudio estudio = estudioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estudio", "id", id));
 
-        if (estudioActualizado != null) {
-            estudioActualizado.setTitulo(titulo);
-            estudioActualizado.setInstitucion(institucion);
-            estudioActualizado.setDescripcion(descripcion);
-            estudioActualizado.setImagen(imagen);
-            estudioActualizado.setFechaInicio(fechaInicio);
-            estudioActualizado.setFechaFin(fechaFin);
+        estudio.setTitulo(titulo);
+        estudio.setInstitucion(institucion);
+        estudio.setDescripcion(descripcion);
+        estudio.setImagen(imagen);
+        estudio.setFechaInicio(fechaInicio);
+        estudio.setFechaFin(fechaFin);
 
-            estudioRepository.save(estudioActualizado);
-        }
+        Estudio estudioActualizado = estudioRepository.save(estudio);
 
         return estudioActualizado;
     }
 
     @Override
     public void eliminarEstudio(Long id) {
-        estudioRepository.deleteById(id);
+        Estudio estudio = estudioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estudio", "id", id));
+        estudioRepository.delete(estudio);
     }
 
 }

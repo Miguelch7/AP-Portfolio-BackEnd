@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.Rol;
 import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.repository.RolRepository;
@@ -32,7 +33,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuario obtenerUsuario(Long id) {
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", id));
 
         return usuario;
     }
@@ -56,19 +57,19 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuario actualizarUsuario(Long id, String email) {
-        Usuario usuarioActualizado = this.obtenerUsuario(id);
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", id));
 
-        if (usuarioActualizado != null) {
-            usuarioActualizado.setEmail(email);
-            
-            usuarioRepository.save(usuarioActualizado);
-        }
+        usuario.setEmail(email);
+
+        Usuario usuarioActualizado = usuarioRepository.save(usuario);
 
         return usuarioActualizado;
     }
 
     @Override
     public void eliminarUsuario(Long id) {
-        usuarioRepository.deleteById(id);
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", id));
+
+        usuarioRepository.delete(usuario);
     }
 }

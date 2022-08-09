@@ -1,5 +1,6 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.DetalleUsuario;
 import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.repository.DetalleUsuarioRepository;
@@ -18,7 +19,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
 
     @Override
     public DetalleUsuario obtenerDetalleUsuarioPorUsuarioId(Long usuarioId) {
-        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElse(null);
+        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
         return detalleUsuario;
     }
@@ -26,7 +27,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
     @Override
     public DetalleUsuario crearDetalleUsuario(Long usuarioId, DetalleUsuario detalleUsuario) {
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
 
         if (usuario != null) {
 
@@ -52,13 +53,9 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
         String linkCv
     ) {
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
 
-        if (usuario == null) {
-            return null;
-        }
-
-        DetalleUsuario detalleUsuarioBD = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElse(null);
+        DetalleUsuario detalleUsuarioBD = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
         if (detalleUsuarioBD == null) {
             DetalleUsuario detalleUsuario = new DetalleUsuario();
@@ -90,7 +87,7 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
 
     @Override
     public void eliminarDetalleUsuario(Long usuarioId) {
-        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElse(null);
+        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
         detalleUsuarioRepository.delete(detalleUsuario);
     }
