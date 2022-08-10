@@ -1,63 +1,60 @@
 package argentinaprograma.portfolioweb.controller;
 
-import argentinaprograma.portfolioweb.model.Trabajo;
+import argentinaprograma.portfolioweb.dto.TrabajoDTO;
 import argentinaprograma.portfolioweb.service.ITrabajoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 @CrossOrigin
 @RestController
+@RequestMapping("/api/trabajos")
 public class TrabajoController {
 
     @Autowired
     private ITrabajoService iTrabajoService;
 
-    @GetMapping("/trabajos")
-    public List<Trabajo> listarTrabajos() {
-        List<Trabajo> listadoTrabajos = iTrabajoService.listarTrabajos();
+    @GetMapping
+    public ResponseEntity<List<TrabajoDTO>> listarTrabajos() {
+        List<TrabajoDTO> listadoTrabajos = iTrabajoService.listarTrabajos();
 
-        return listadoTrabajos;
+        return new ResponseEntity<>(listadoTrabajos, HttpStatus.OK);
     }
 
-    @GetMapping("/trabajos/{id}")
-    public Trabajo obtenerTrabajo(@PathVariable Long id) {
-        Trabajo trabajo = iTrabajoService.obtenerTrabajo(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<TrabajoDTO> obtenerTrabajo(@PathVariable Long id) {
+        TrabajoDTO trabajo = iTrabajoService.obtenerTrabajo(id);
 
-        return trabajo;
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/trabajos")
-    public Trabajo crearTrabajo(@RequestBody Trabajo trabajo) {
-        Trabajo trabajoCreado = iTrabajoService.crearTrabajo(trabajo);
-
-        return trabajoCreado;
+        return new ResponseEntity<>(trabajo, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/trabajos/{id}")
-    public Trabajo actualizarTrabajo(
-            @PathVariable Long id,
-            @RequestParam("puesto") String puesto,
-            @RequestParam("empresa") String empresa,
-            @RequestParam("descripcion") String descripcion,
-            @RequestParam("imagen") String imagen,
-            @RequestParam("fecha_inicio") String fecha_inicio,
-            @RequestParam("fecha_fin") String fecha_fin
-    ) {
-        Trabajo trabajoActualizado = iTrabajoService.actualizarTrabajo(id, puesto, empresa, descripcion, imagen, fecha_inicio, fecha_fin);
+    @PostMapping
+    public ResponseEntity<TrabajoDTO> crearTrabajo(@Valid @RequestBody TrabajoDTO trabajoDTO) {
+        TrabajoDTO trabajoCreado = iTrabajoService.crearTrabajo(trabajoDTO);
 
-        return trabajoActualizado;
+        return new ResponseEntity<>(trabajoCreado, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/trabajos/{id}")
-    public Long eliminarTrabajo(@PathVariable Long id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<TrabajoDTO> actualizarTrabajo(@PathVariable Long id, @Valid @RequestBody TrabajoDTO trabajoDTO) {
+        TrabajoDTO trabajoActualizado = iTrabajoService.actualizarTrabajo(id, trabajoDTO);
+
+        return new ResponseEntity<>(trabajoActualizado, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> eliminarTrabajo(@PathVariable Long id) {
         iTrabajoService.eliminarTrabajo(id);
 
-        return id;
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

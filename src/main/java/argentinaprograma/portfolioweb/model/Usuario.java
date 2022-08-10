@@ -9,13 +9,17 @@ import java.util.Set;
 
 @Getter @Setter
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

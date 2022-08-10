@@ -1,11 +1,14 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.dto.TrabajoDTO;
+import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.Trabajo;
 import argentinaprograma.portfolioweb.repository.TrabajoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TrabajoService implements ITrabajoService {
@@ -13,48 +16,81 @@ public class TrabajoService implements ITrabajoService {
     @Autowired
     private TrabajoRepository trabajoRepository;
 
-    @Override
-    public List<Trabajo> listarTrabajos() {
-        List<Trabajo> listadoTrabajos = trabajoRepository.findAll();
+    // Convertir Entity a DTO
+    private TrabajoDTO mapToDTO(Trabajo trabajo) {
+        TrabajoDTO trabajoDTO = new TrabajoDTO();
 
-        return listadoTrabajos;
+        trabajoDTO.setId(trabajo.getId());
+        trabajoDTO.setPuesto(trabajo.getPuesto());
+        trabajoDTO.setEmpresa(trabajo.getEmpresa());
+        trabajoDTO.setDescripcion(trabajo.getDescripcion());
+        trabajoDTO.setImagen(trabajo.getImagen());
+        trabajoDTO.setFechaInicio(trabajo.getFechaInicio());
+        trabajoDTO.setFechaFin(trabajo.getFechaFin());
+
+        return trabajoDTO;
     }
 
-    @Override
-    public Trabajo obtenerTrabajo(Long id) {
-        Trabajo trabajo = trabajoRepository.findById(id).orElse(null);
+    // Convertir DTO a Entity
+    private Trabajo mapToEntity(TrabajoDTO trabajoDTO) {
+        Trabajo trabajo = new Trabajo();
+
+        trabajo.setPuesto(trabajoDTO.getPuesto());
+        trabajo.setEmpresa(trabajoDTO.getEmpresa());
+        trabajo.setDescripcion(trabajoDTO.getDescripcion());
+        trabajo.setImagen(trabajoDTO.getImagen());
+        trabajo.setFechaInicio(trabajoDTO.getFechaInicio());
+        trabajo.setFechaFin(trabajoDTO.getFechaFin());
 
         return trabajo;
     }
 
     @Override
-    public Trabajo crearTrabajo(Trabajo trabajo) {
-        Trabajo nuevoTrabajo = trabajoRepository.save(trabajo);
+    public List<TrabajoDTO> listarTrabajos() {
+        List<Trabajo> listadoTrabajos = trabajoRepository.findAll();
 
-        return nuevoTrabajo;
+        List<TrabajoDTO> listadoTrabajosDTO = listadoTrabajos.stream().map(trabajo -> mapToDTO(trabajo)).collect(Collectors.toList());
+
+        return listadoTrabajosDTO;
     }
 
     @Override
-    public Trabajo actualizarTrabajo(Long id, String puesto, String empresa, String descripcion, String imagen, String fecha_inicio, String fecha_fin) {
+    public TrabajoDTO obtenerTrabajo(Long id) {
+        Trabajo trabajo = trabajoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trabajo", "id", id));;
 
-        Trabajo trabajoActualizado = obtenerTrabajo(id);
+        return mapToDTO(trabajo);
+    }
 
-        if (trabajoActualizado != null) {
-            trabajoActualizado.setPuesto(puesto);
-            trabajoActualizado.setEmpresa(empresa);
-            trabajoActualizado.setDescripcion(descripcion);
-            trabajoActualizado.setImagen(imagen);
-            trabajoActualizado.setFecha_inicio(fecha_inicio);
-            trabajoActualizado.setFecha_fin(fecha_fin);
+    @Override
+    public TrabajoDTO crearTrabajo(TrabajoDTO trabajoDTO) {
+        Trabajo trabajo = mapToEntity(trabajoDTO);
 
-            trabajoRepository.save(trabajoActualizado);
-        }
+        Trabajo nuevoTrabajo = trabajoRepository.save(trabajo);
 
-        return trabajoActualizado;
+        return mapToDTO(nuevoTrabajo);
+    }
+
+    @Override
+    public TrabajoDTO actualizarTrabajo(Long id, TrabajoDTO trabajoDTO) {
+
+        Trabajo trabajo = trabajoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trabajo", "id", id));;
+
+        trabajo.setPuesto(trabajoDTO.getPuesto());
+        trabajo.setEmpresa(trabajoDTO.getEmpresa());
+        trabajo.setDescripcion(trabajoDTO.getDescripcion());
+        trabajo.setImagen(trabajoDTO.getImagen());
+        trabajo.setFechaInicio(trabajoDTO.getFechaInicio());
+        trabajo.setFechaFin(trabajoDTO.getFechaFin());
+
+        Trabajo trabajoActualizado = trabajoRepository.save(trabajo);
+
+        return mapToDTO(trabajoActualizado);
     }
 
     @Override
     public void eliminarTrabajo(Long id) {
-        trabajoRepository.deleteById(id);
+        Trabajo trabajo = trabajoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trabajo", "id", id));;
+
+        trabajoRepository.delete(trabajo);
     }
 }

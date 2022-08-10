@@ -1,5 +1,7 @@
 package argentinaprograma.portfolioweb.service;
 
+import argentinaprograma.portfolioweb.dto.DetalleUsuarioDTO;
+import argentinaprograma.portfolioweb.exception.ResourceNotFoundException;
 import argentinaprograma.portfolioweb.model.DetalleUsuario;
 import argentinaprograma.portfolioweb.model.Usuario;
 import argentinaprograma.portfolioweb.repository.DetalleUsuarioRepository;
@@ -16,81 +18,76 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Override
-    public DetalleUsuario obtenerDetalleUsuarioPorUsuarioId(Long usuarioId) {
-        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElse(null);
+    // Convertir Entity a DTO
+    private DetalleUsuarioDTO mapToDTO(DetalleUsuario detalleUsuario) {
+        DetalleUsuarioDTO detalleUsuarioDTO = new DetalleUsuarioDTO();
+
+        detalleUsuarioDTO.setId(detalleUsuario.getId());
+        detalleUsuarioDTO.setNombre(detalleUsuario.getNombre());
+        detalleUsuarioDTO.setApellido(detalleUsuario.getApellido());
+        detalleUsuarioDTO.setProfesion(detalleUsuario.getProfesion());
+        detalleUsuarioDTO.setDescripcion(detalleUsuario.getDescripcion());
+        detalleUsuarioDTO.setImagen(detalleUsuario.getImagen());
+        detalleUsuarioDTO.setDireccion(detalleUsuario.getDireccion());
+        detalleUsuarioDTO.setLinkCv(detalleUsuario.getLinkCv());
+
+        return detalleUsuarioDTO;
+    }
+
+    // Convertir DTO a Entity
+    private DetalleUsuario mapToEntity(DetalleUsuarioDTO detalleUsuarioDTO) {
+        DetalleUsuario detalleUsuario = new DetalleUsuario();
+
+        detalleUsuario.setNombre(detalleUsuarioDTO.getNombre());
+        detalleUsuario.setApellido(detalleUsuarioDTO.getApellido());
+        detalleUsuario.setProfesion(detalleUsuarioDTO.getProfesion());
+        detalleUsuario.setDescripcion(detalleUsuarioDTO.getDescripcion());
+        detalleUsuario.setImagen(detalleUsuarioDTO.getImagen());
+        detalleUsuario.setDireccion(detalleUsuarioDTO.getDireccion());
+        detalleUsuario.setLinkCv(detalleUsuarioDTO.getLinkCv());
 
         return detalleUsuario;
     }
 
     @Override
-    public DetalleUsuario crearDetalleUsuario(Long usuarioId, DetalleUsuario detalleUsuario) {
+    public DetalleUsuarioDTO obtenerDetalleUsuarioPorUsuarioId(Long usuarioId) {
+        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
-
-        if (usuario != null) {
-
-            detalleUsuario.setUsuario(usuario);
-
-            DetalleUsuario detalleUsuarioCreado = detalleUsuarioRepository.save(detalleUsuario);
-
-            return detalleUsuarioCreado;
-        }
-
-        return null;
+        return mapToDTO(detalleUsuario);
     }
 
     @Override
-    public DetalleUsuario actualizarDetalleUsuario(
-        Long usuarioId,
-        String nombre,
-        String apellido,
-        String profesion,
-        String descripcion,
-        String imagen,
-        String direccion,
-        String cv
-    ) {
+    public DetalleUsuarioDTO crearDetalleUsuario(Long usuarioId, DetalleUsuarioDTO detalleUsuarioDTO) {
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        DetalleUsuario detalleUsuario = mapToEntity(detalleUsuarioDTO);
 
-        if (usuario == null) {
-            return null;
-        }
+        detalleUsuario.setUsuario(usuario);
 
-        DetalleUsuario detalleUsuarioBD = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElse(null);
+        DetalleUsuario detalleUsuarioCreado = detalleUsuarioRepository.save(detalleUsuario);
 
-        if (detalleUsuarioBD == null) {
-            DetalleUsuario detalleUsuario = new DetalleUsuario();
-            detalleUsuario.setNombre(nombre);
-            detalleUsuario.setApellido(apellido);
-            detalleUsuario.setDescripcion(descripcion);
-            detalleUsuario.setProfesion(profesion);
-            detalleUsuario.setDireccion(direccion);
-            detalleUsuario.setCv(cv);
-            detalleUsuario.setUsuario(usuario);
+        return mapToDTO(detalleUsuarioCreado);
+    }
 
-            DetalleUsuario detalleUsuarioNuevo = detalleUsuarioRepository.save(detalleUsuario);
-            detalleUsuarioNuevo.setUsuario(usuario);
+    @Override
+    public DetalleUsuarioDTO actualizarDetalleUsuario(Long usuarioId, DetalleUsuarioDTO detalleUsuarioDTO) {
+        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
-            return detalleUsuarioNuevo;
-        }
+        detalleUsuario.setNombre(detalleUsuarioDTO.getNombre());
+        detalleUsuario.setApellido(detalleUsuarioDTO.getApellido());
+        detalleUsuario.setDescripcion(detalleUsuarioDTO.getDescripcion());
+        detalleUsuario.setProfesion(detalleUsuarioDTO.getProfesion());
+        detalleUsuario.setDireccion(detalleUsuarioDTO.getDireccion());
+        detalleUsuario.setLinkCv(detalleUsuarioDTO.getLinkCv());
 
-        detalleUsuarioBD.setNombre(nombre);
-        detalleUsuarioBD.setApellido(apellido);
-        detalleUsuarioBD.setDescripcion(descripcion);
-        detalleUsuarioBD.setProfesion(profesion);
-        detalleUsuarioBD.setDireccion(direccion);
-        detalleUsuarioBD.setCv(cv);
+        DetalleUsuario detalleUsuarioActualizado = detalleUsuarioRepository.save(detalleUsuario);
 
-        DetalleUsuario detalleUsuarioActualizado = detalleUsuarioRepository.save(detalleUsuarioBD);
-
-        return detalleUsuarioActualizado;
+        return mapToDTO(detalleUsuarioActualizado);
     }
 
     @Override
     public void eliminarDetalleUsuario(Long usuarioId) {
-        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElse(null);
+        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
         detalleUsuarioRepository.delete(detalleUsuario);
     }
