@@ -71,16 +71,16 @@ public class EstudioService implements IEstudioService {
     }
 
     @Override
-    public EstudioDTO actualizarEstudio(Long id, String titulo, String institucion, String descripcion, String imagen, String fechaInicio, String fechaFin) {
+    public EstudioDTO actualizarEstudio(Long id, EstudioDTO estudioDTO) {
 
         Estudio estudio = estudioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estudio", "id", id));
 
-        estudio.setTitulo(titulo);
-        estudio.setInstitucion(institucion);
-        estudio.setDescripcion(descripcion);
-        estudio.setImagen(imagen);
-        estudio.setFechaInicio(fechaInicio);
-        estudio.setFechaFin(fechaFin);
+        estudio.setTitulo(estudioDTO.getTitulo());
+        estudio.setInstitucion(estudioDTO.getInstitucion());
+        estudio.setDescripcion(estudioDTO.getDescripcion());
+        estudio.setImagen(estudioDTO.getImagen());
+        estudio.setFechaInicio(estudioDTO.getFechaInicio());
+        estudio.setFechaFin(estudioDTO.getFechaFin());
 
         Estudio estudioActualizado = estudioRepository.save(estudio);
 

@@ -70,45 +70,17 @@ public class DetalleUsuarioService implements IDetalleUsuarioService {
     }
 
     @Override
-    public DetalleUsuarioDTO actualizarDetalleUsuario(
-        Long usuarioId,
-        String nombre,
-        String apellido,
-        String profesion,
-        String descripcion,
-        String imagen,
-        String direccion,
-        String linkCv
-    ) {
+    public DetalleUsuarioDTO actualizarDetalleUsuario(Long usuarioId, DetalleUsuarioDTO detalleUsuarioDTO) {
+        DetalleUsuario detalleUsuario = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
+        detalleUsuario.setNombre(detalleUsuarioDTO.getNombre());
+        detalleUsuario.setApellido(detalleUsuarioDTO.getApellido());
+        detalleUsuario.setDescripcion(detalleUsuarioDTO.getDescripcion());
+        detalleUsuario.setProfesion(detalleUsuarioDTO.getProfesion());
+        detalleUsuario.setDireccion(detalleUsuarioDTO.getDireccion());
+        detalleUsuario.setLinkCv(detalleUsuarioDTO.getLinkCv());
 
-        DetalleUsuario detalleUsuarioBD = detalleUsuarioRepository.findByUsuarioId(usuarioId).orElseThrow(() -> new ResourceNotFoundException("Detalle Usuario", "usuario_id", usuarioId));
-
-        if (detalleUsuarioBD == null) {
-            DetalleUsuario detalleUsuario = new DetalleUsuario();
-            detalleUsuario.setNombre(nombre);
-            detalleUsuario.setApellido(apellido);
-            detalleUsuario.setDescripcion(descripcion);
-            detalleUsuario.setProfesion(profesion);
-            detalleUsuario.setDireccion(direccion);
-            detalleUsuario.setLinkCv(linkCv);
-            detalleUsuario.setUsuario(usuario);
-
-            DetalleUsuario detalleUsuarioNuevo = detalleUsuarioRepository.save(detalleUsuario);
-            detalleUsuarioNuevo.setUsuario(usuario);
-
-            return mapToDTO(detalleUsuarioNuevo);
-        }
-
-        detalleUsuarioBD.setNombre(nombre);
-        detalleUsuarioBD.setApellido(apellido);
-        detalleUsuarioBD.setDescripcion(descripcion);
-        detalleUsuarioBD.setProfesion(profesion);
-        detalleUsuarioBD.setDireccion(direccion);
-        detalleUsuarioBD.setLinkCv(linkCv);
-
-        DetalleUsuario detalleUsuarioActualizado = detalleUsuarioRepository.save(detalleUsuarioBD);
+        DetalleUsuario detalleUsuarioActualizado = detalleUsuarioRepository.save(detalleUsuario);
 
         return mapToDTO(detalleUsuarioActualizado);
     }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -44,10 +45,7 @@ public class UsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(
-            @PathVariable Long id,
-            @RequestParam("email") String nuevoEmail
-    ) {
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @Valid @RequestParam("email") String nuevoEmail) {
         Usuario usuarioActualizado = iUsuarioService.actualizarUsuario(id, nuevoEmail);
 
         return new ResponseEntity<>(usuarioActualizado, HttpStatus.OK);

@@ -68,13 +68,13 @@ public class SkillService implements ISkillService {
     }
 
     @Override
-    public SkillDTO actualizarSkill(Long id, String nombre, String descripcion, String imagen, Integer porcentaje) {
+    public SkillDTO actualizarSkill(Long id, SkillDTO skillDTO) {
         Skill skill = skillRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Skill", "id", id));;
 
-        skill.setNombre(nombre);
-        skill.setDescripcion(descripcion);
-        skill.setImagen(imagen);
-        skill.setPorcentaje(porcentaje);
+        skill.setNombre(skillDTO.getNombre());
+        skill.setDescripcion(skillDTO.getDescripcion());
+        skill.setImagen(skillDTO.getImagen());
+        skill.setPorcentaje(skillDTO.getPorcentaje());
 
         Skill skillActualizada = skillRepository.save(skill);
 

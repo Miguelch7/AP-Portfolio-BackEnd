@@ -43,14 +43,8 @@ public class SkillController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<SkillDTO> actualizarSkill(
-            @PathVariable Long id,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("descripcion") String descripcion,
-            @RequestParam("imagen") String imagen,
-            @RequestParam("porcentaje") Integer porcentaje
-    ) {
-        SkillDTO skillActualizada = iSkillService.actualizarSkill(id, nombre, descripcion, imagen, porcentaje);
+    public ResponseEntity<SkillDTO> actualizarSkill(@PathVariable Long id, @Valid @RequestBody SkillDTO skillDTO) {
+        SkillDTO skillActualizada = iSkillService.actualizarSkill(id, skillDTO);
 
         return new ResponseEntity<>(skillActualizada, HttpStatus.OK);
     }

@@ -43,15 +43,8 @@ public class ProyectoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<ProyectoDTO> actualizarProyecto(
-            @PathVariable Long id,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("descripcion") String descripcion,
-            @RequestParam("imagen") String imagen,
-            @RequestParam("linkProyecto") String linkProyecto,
-            @RequestParam("linkRepositorio") String linkRepositorio
-    ) {
-        ProyectoDTO proyectoActualizado = iProyectoService.actualizarProyecto(id, nombre, descripcion, imagen, linkProyecto, linkRepositorio);
+    public ResponseEntity<ProyectoDTO> actualizarProyecto(@PathVariable Long id, @Valid @RequestBody ProyectoDTO proyectoDTO) {
+        ProyectoDTO proyectoActualizado = iProyectoService.actualizarProyecto(id, proyectoDTO);
 
         return new ResponseEntity<>(proyectoActualizado, HttpStatus.OK);
     }

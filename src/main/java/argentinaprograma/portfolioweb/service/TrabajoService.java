@@ -71,16 +71,16 @@ public class TrabajoService implements ITrabajoService {
     }
 
     @Override
-    public TrabajoDTO actualizarTrabajo(Long id, String puesto, String empresa, String descripcion, String imagen, String fechaInicio, String fechaFin) {
+    public TrabajoDTO actualizarTrabajo(Long id, TrabajoDTO trabajoDTO) {
 
         Trabajo trabajo = trabajoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trabajo", "id", id));;
 
-        trabajo.setPuesto(puesto);
-        trabajo.setEmpresa(empresa);
-        trabajo.setDescripcion(descripcion);
-        trabajo.setImagen(imagen);
-        trabajo.setFechaInicio(fechaInicio);
-        trabajo.setFechaFin(fechaFin);
+        trabajo.setPuesto(trabajoDTO.getPuesto());
+        trabajo.setEmpresa(trabajoDTO.getEmpresa());
+        trabajo.setDescripcion(trabajoDTO.getDescripcion());
+        trabajo.setImagen(trabajoDTO.getImagen());
+        trabajo.setFechaInicio(trabajoDTO.getFechaInicio());
+        trabajo.setFechaFin(trabajoDTO.getFechaFin());
 
         Trabajo trabajoActualizado = trabajoRepository.save(trabajo);
 

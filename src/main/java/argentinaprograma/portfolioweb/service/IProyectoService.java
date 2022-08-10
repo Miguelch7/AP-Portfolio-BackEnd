@@ -9,6 +9,6 @@ public interface IProyectoService {
     public List<ProyectoDTO> listarProyectos();
     public ProyectoDTO obtenerProyecto(Long id);
     public ProyectoDTO crearProyecto(ProyectoDTO proyectoDTO);
-    public ProyectoDTO actualizarProyecto(Long id, String nombre, String descripcion, String imagen, String linkProyecto, String linkRepositorio);
+    public ProyectoDTO actualizarProyecto(Long id, ProyectoDTO proyectoDTO);
     public void eliminarProyecto(Long id);
 }

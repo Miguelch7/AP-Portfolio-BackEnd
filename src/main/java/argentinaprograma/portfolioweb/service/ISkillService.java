@@ -9,6 +9,6 @@ public interface ISkillService {
     public List<SkillDTO> listarSkills();
     public SkillDTO obtenerSkill(Long id);
     public SkillDTO crearSkill(SkillDTO skillDTO);
-    public SkillDTO actualizarSkill(Long id, String nombre, String descripcion, String imagen, Integer porcentaje);
+    public SkillDTO actualizarSkill(Long id, SkillDTO skillDTO);
     public void eliminarSkill(Long id);
 }

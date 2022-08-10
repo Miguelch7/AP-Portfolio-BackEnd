@@ -43,16 +43,8 @@ public class EstudioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<EstudioDTO> actualizarEstudio(
-            @PathVariable Long id,
-            @RequestParam("titulo") String titulo,
-            @RequestParam("institucion") String institucion,
-            @RequestParam("descripcion") String descripcion,
-            @RequestParam("imagen") String imagen,
-            @RequestParam("fechaInicio") String fechaInicio,
-            @RequestParam("fechaFin") String fechaFin
-    ) {
-        EstudioDTO estudioActualizado = iEstudioService.actualizarEstudio(id, titulo, institucion, descripcion, imagen, fechaInicio, fechaFin);
+    public ResponseEntity<EstudioDTO> actualizarEstudio(@PathVariable Long id, @Valid @RequestBody EstudioDTO estudioDTO) {
+        EstudioDTO estudioActualizado = iEstudioService.actualizarEstudio(id, estudioDTO);
 
         return new ResponseEntity<>(estudioActualizado, HttpStatus.OK);
     }

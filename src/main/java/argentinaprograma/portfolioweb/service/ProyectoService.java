@@ -69,14 +69,14 @@ public class ProyectoService implements IProyectoService {
     }
 
     @Override
-    public ProyectoDTO actualizarProyecto(Long id, String nombre, String descripcion, String imagen, String linkProyecto, String linkRepositorio) {
+    public ProyectoDTO actualizarProyecto(Long id, ProyectoDTO proyectoDTO) {
         Proyecto proyecto = proyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto", "id", id));;
 
-        proyecto.setNombre(nombre);
-        proyecto.setDescripcion(descripcion);
-        proyecto.setImagen(imagen);
-        proyecto.setLinkProyecto(linkProyecto);
-        proyecto.setLinkRepositorio(linkRepositorio);
+        proyecto.setNombre(proyectoDTO.getNombre());
+        proyecto.setDescripcion(proyectoDTO.getDescripcion());
+        proyecto.setImagen(proyectoDTO.getImagen());
+        proyecto.setLinkProyecto(proyectoDTO.getLinkProyecto());
+        proyecto.setLinkRepositorio(proyectoDTO.getLinkRepositorio());
 
         Proyecto proyectoActualizado = proyectoRepository.save(proyecto);
 

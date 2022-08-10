@@ -44,16 +44,8 @@ public class TrabajoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<TrabajoDTO> actualizarTrabajo(
-            @PathVariable Long id,
-            @RequestParam("puesto") String puesto,
-            @RequestParam("empresa") String empresa,
-            @RequestParam("descripcion") String descripcion,
-            @RequestParam("imagen") String imagen,
-            @RequestParam("fechaInicio") String fechaInicio,
-            @RequestParam("fechaFin") String fechaFin
-    ) {
-        TrabajoDTO trabajoActualizado = iTrabajoService.actualizarTrabajo(id, puesto, empresa, descripcion, imagen, fechaInicio, fechaFin);
+    public ResponseEntity<TrabajoDTO> actualizarTrabajo(@PathVariable Long id, @Valid @RequestBody TrabajoDTO trabajoDTO) {
+        TrabajoDTO trabajoActualizado = iTrabajoService.actualizarTrabajo(id, trabajoDTO);
 
         return new ResponseEntity<>(trabajoActualizado, HttpStatus.OK);
     }

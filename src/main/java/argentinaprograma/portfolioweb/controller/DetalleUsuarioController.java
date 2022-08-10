@@ -35,17 +35,8 @@ public class DetalleUsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{usuarioId}/detalle")
-    public ResponseEntity<DetalleUsuarioDTO> actualizarDetalleUsuario(
-        @PathVariable(value = "usuarioId") Long usuarioId,
-        @RequestParam("nombre") String nombre,
-        @RequestParam("apellido") String apellido,
-        @RequestParam("profesion") String profesion,
-        @RequestParam("descripcion") String descripcion,
-        @RequestParam("imagen") String imagen,
-        @RequestParam("direccion") String direccion,
-        @RequestParam("linkCv") String linkCv
-    ) {
-        DetalleUsuarioDTO detalleUsuarioActualizado = iDetalleUsuarioService.actualizarDetalleUsuario(usuarioId, nombre, apellido, profesion, descripcion, imagen, direccion, linkCv);
+    public ResponseEntity<DetalleUsuarioDTO> actualizarDetalleUsuario(@PathVariable(value = "usuarioId") Long usuarioId, @Valid @RequestBody DetalleUsuarioDTO detalleUsuarioDTO) {
+        DetalleUsuarioDTO detalleUsuarioActualizado = iDetalleUsuarioService.actualizarDetalleUsuario(usuarioId, detalleUsuarioDTO);
 
         return new ResponseEntity<>(detalleUsuarioActualizado, HttpStatus.OK);
     }
