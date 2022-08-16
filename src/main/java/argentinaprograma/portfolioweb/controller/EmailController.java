@@ -5,6 +5,7 @@ import argentinaprograma.portfolioweb.service.IEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/email")
 public class EmailController {
